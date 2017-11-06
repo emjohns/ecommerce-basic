@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ecommerce</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <ul class="nav navbar-nav">
+            <li class="navbar-brand">
+            <h3><em>Fine Jewelry</em></h3>
+          </li>
+          <li>
+            <%= link_to 'Home', root_path %>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Products <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <% @categories.each do |category| %>
+              <li><%= link_to category.name, categorical_path(category_id: category.id) %></li>
+              <% end %>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Brands<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <% @brands.each do |brand| %>
+              <li><%= link_to brand, branding_path(brand: brand) %></li>
+              <% end %>
+              <li><%= link_to 'All', root_path %></li>
+            </ul>
+          </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <% if user_signed_in? %>
+              Welcome, <%= current_user.email %>!
+              <% else %>
+              Welcome, Guest!
+              <%end%>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <div>
+                  <%if can? :manage, Product %>
+                  <p class="text-center">
+                    <strong><%= current_user.email %></strong>
+                  </p>
+                </div>
+                <li>
+                  <%= link_to "View Cart", view_order_path %>
+                <li>
+                <li class="divider"></li>
+              </li>
+              <li>
+                <%= link_to 'Product List', products_path %>
+              </li>
+              <li>
+                <%= link_to 'New Product', new_product_path %>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <%= link_to "Edit Profile", edit_user_registration_path %>
+              </li>
+              <li>
+                <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
+              </li>
+              <% elsif user_signed_in? %>
+              <p class="text-center">
+                <strong><%= current_user.email %></strong>
+              </p>
+            </div>
+            <li>
+              <%= link_to "View Cart", view_order_path %>
+              <li>
+                <li class="divider"></li>
+              </li>
+              <li>
+                <%= link_to "Edit Profile", edit_user_registration_path %>
+              </li>
+              <li>
+                <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
+              </li>
+              <% else %>
+              <p class="text-center">
+                <strong>Guest</strong>
+              </p>
+            </div>
+            <li class="divider"></li>
+            <li>
+              <%= link_to "View Cart", view_order_path %>
+            <li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to "Sign In", new_user_session_path %>
+            </li>
+            <li>
+              <%= link_to "Sign Up", new_user_registration_path %>
+            </li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+
+    </nav>
+
+
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+  </html>
